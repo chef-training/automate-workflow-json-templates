@@ -1,0 +1,1198 @@
+
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "bjc demo",
+  "Parameters": {
+    "AvailabilityZone": {
+      "Description": "Availability Zone",
+      "Type": "String",
+      "Default": "us-east-1b"
+    },
+    "DemoName": {
+      "Description": "Name of the customer or organization",
+      "Type": "String",
+      "Default": "automate-training-7-ws"
+    },
+    "Version": {
+      "Description": "Version",
+      "Type": "String",
+      "Default": "0.2.5"
+    },
+    "KeyName": {
+      "Description": "Name of an existing ec2 KeyPair to enable SSH access",
+      "Type": "AWS::EC2::KeyPair::KeyName",
+      "ConstraintDescription": "must be the name of an existing EC2 KeyPair."
+    },
+    "SSHLocation": {
+      "Description": "The IP address range that can be used to SSH to the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+    },
+    "TTL": {
+      "Description": "Time in hours for the demo to stay active. Default is 4, maximum is 720 hours (30 days).",
+      "Type": "Number",
+      "Default": 8,
+      "MinValue": 0,
+      "MaxValue": 720
+    },
+    "ChefServerAMI": {
+      "Type": "String",
+      "Default": "ami-52c4e345",
+      "Description": "AMI ID for the Chef Server"
+    },
+    "ComplianceAMI": {
+      "Type": "String",
+      "Default": "ami-dfc6e1c8",
+      "Description": "AMI ID for the Compliance Server"
+    },
+    "BuildNode1AMI": {
+      "Type": "String",
+      "Default": "ami-2ffbdc38",
+      "Description": "AMI ID for Build Node 1"
+    },
+    "BuildNode2AMI": {
+      "Type": "String",
+      "Default": "ami-acf9debb",
+      "Description": "AMI ID for Build Node 2"
+    },
+    "BuildNode3AMI": {
+      "Type": "String",
+      "Default": "ami-09f9de1e",
+      "Description": "AMI ID for Build Node 3"
+    },
+    "BuildNode4AMI": {
+      "Type": "String",
+      "Default": "ami-2afadd3d",
+      "Description": "AMI ID for Build Node 4"
+    },
+    "acceptanceAMI": {
+      "Type": "String",
+      "Default": "ami-a5f9deb2",
+      "Description": "AMI ID for acceptance"
+    },
+    "deliveredAMI": {
+      "Type": "String",
+      "Default": "ami-73f9de64",
+      "Description": "AMI ID for delivered"
+    },
+    "ecomacceptanceAMI": {
+      "Type": "String",
+      "Default": "ami-2cfadd3b",
+      "Description": "AMI ID for ecomacceptance"
+    },
+    "rehearsalAMI": {
+      "Type": "String",
+      "Default": "ami-72f9de65",
+      "Description": "AMI ID for rehearsal"
+    },
+    "unionAMI": {
+      "Type": "String",
+      "Default": "ami-bbf9deac",
+      "Description": "AMI ID for union"
+    },
+    "WindowsWorkstation1AMI": {
+      "Type": "String",
+      "Default": "ami-0bc7e01c",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "WindowsWorkstation2AMI": {
+      "Type": "String",
+      "Default": "ami-a6c7e0b1",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "WindowsWorkstation3AMI": {
+      "Type": "String",
+      "Default": "ami-67c5e270",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "WindowsWorkstation4AMI": {
+      "Type": "String",
+      "Default": "ami-a0c7e0b7",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "WindowsWorkstation5AMI": {
+      "Type": "String",
+      "Default": "ami-0dc4e31a",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "WindowsWorkstation6AMI": {
+      "Type": "String",
+      "Default": "ami-efc3e4f8",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "WindowsWorkstation7AMI": {
+      "Type": "String",
+      "Default": "ami-9ac2e58d",
+      "Description": "AMI ID for the Windows Workstation"
+    },
+    "AutomateAMI": {
+      "Type": "String",
+      "Default": "ami-8cf8df9b",
+      "Description": "AMI ID for the Automate Server"
+    }
+  },
+  "Resources": {
+    "VPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "172.31.0.0/16",
+        "EnableDnsSupport": "true",
+        "EnableDnsHostnames": "true",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "VPC" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "SubnetAutomate": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "172.31.54.0/24",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Automate Subnet" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "SubnetProd": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "172.31.62.0/24",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Prod Subnet" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "SubnetWorkstations": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "CidrBlock": "172.31.10.0/24",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstations Subnet" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "InternetGateway": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, " IG" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "AttachGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "RouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Demo RouteTable" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "Route": {
+      "Type": "AWS::EC2::Route",
+      "DependsOn": "AttachGateway",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        }
+      }
+    },
+    "SubnetRouteTableAssociationAutomate": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SubnetAutomate"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "SubnetRouteTableAssociationProd": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SubnetProd"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "SubnetRouteTableAssociationWorkstations": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SubnetWorkstations"
+        },
+        "RouteTableId": {
+          "Ref": "RouteTable"
+        }
+      }
+    },
+    "NetworkAcl": {
+      "Type": "AWS::EC2::NetworkAcl",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": {
+              "Ref": "AWS::StackId"
+            },
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "NetworkAcl" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "InboundNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "100",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "Egress": "false",
+        "CidrBlock": "0.0.0.0/0"
+      }
+    },
+    "OutBoundNetworkAclEntry": {
+      "Type": "AWS::EC2::NetworkAclEntry",
+      "Properties": {
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        },
+        "RuleNumber": "100",
+        "Protocol": "-1",
+        "RuleAction": "allow",
+        "Egress": "true",
+        "CidrBlock": "0.0.0.0/0"
+      }
+    },
+    "SubnetNetworkAclAssociationAutomate": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SubnetAutomate"
+        },
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        }
+      }
+    },
+    "SubnetNetworkAclAssociationProd": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SubnetProd"
+        },
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        }
+      }
+    },
+    "SubnetNetworkAclAssociationPOCWorkstations": {
+      "Type": "AWS::EC2::SubnetNetworkAclAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "SubnetWorkstations"
+        },
+        "NetworkAclId": {
+          "Ref": "NetworkAcl"
+        }
+      }
+    },
+    "WindowsWorkstation1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.201",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation1AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "WindowsWorkstation2": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.202",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation2AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "WindowsWorkstation3": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.203",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation3AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "WindowsWorkstation4": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.204",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation4AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "WindowsWorkstation5": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.205",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation5AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "WindowsWorkstation6": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.206",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation6AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "WindowsWorkstation7": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.207",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": {
+          "Ref": "KeyName"
+        },
+        "ImageId": {
+              "Ref": "WindowsWorkstation7AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Workstation" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.51",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-1\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode1AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 1" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode2": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.52",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-2\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode2AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 2" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode3": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.53",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-3\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode3AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 3" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode4": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.54",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-4\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode4AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 4" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "acceptance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.101",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname acceptance\n"]]}
+        },
+        "ImageId": {
+              "Ref": "acceptanceAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "acceptance" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "delivered": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.102",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname delivered\n"]]}
+        },
+        "ImageId": {
+              "Ref": "deliveredAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "delivered" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "ecomacceptance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.103",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname ecomacceptance\n"]]}
+        },
+        "ImageId": {
+              "Ref": "ecomacceptanceAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "ecomacceptance" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "rehearsal": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.104",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname rehearsal\n"]]}
+        },
+        "ImageId": {
+              "Ref": "rehearsalAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "rehearsal" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "union": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.105",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname union\n"]]}
+        },
+        "ImageId": {
+              "Ref": "unionAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "union" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "Chef": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "c3.xlarge",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+      	"BlockDeviceMappings" : [
+         	{
+        	  "DeviceName" : "/dev/sda1",
+        	  "Ebs" : { "VolumeSize" : "50" }
+         	}
+      	],
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.10",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname chef\n",
+             "chef-server-ctl reconfigure\n"]]}
+        },
+        "ImageId": {
+              "Ref": "ChefServerAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Chef Server" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "Automate": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "c3.xlarge",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+      	"BlockDeviceMappings" : [
+         	{
+            	  "DeviceName" : "/dev/sda1",
+            	  "Ebs" : { "VolumeSize" : "50" }
+         	}
+      	] ,
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.11",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname automate\n",
+             "delivery-ctl reconfigure\n"]]}
+        },
+        "ImageId": {
+              "Ref": "AutomateAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Automate Server" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "Compliance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "c3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "BlockDeviceMappings" : [
+          {
+                "DeviceName" : "/dev/sda1",
+                "Ebs" : { "VolumeSize" : "8" }
+          }
+        ] ,
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.12",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname compliance\n",
+             "chef-compliance-ctl reconfigure\n"]]}
+        },
+        "ImageId": {
+              "Ref": "ComplianceAMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Compliance Server" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "DemoSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "GroupDescription": "Enable required ports for Chef Server",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": {
+              "Ref": "SSHLocation"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "0",
+            "ToPort": "65535",
+            "CidrIp": "172.31.0.0/16"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "icmp",
+            "FromPort": "8",
+            "ToPort": "-1",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "udp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs":
+{"WindowsWorkstation1PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation1","PublicIp"]}},"WindowsWorkstation2PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation2","PublicIp"]}},"WindowsWorkstation3PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation3","PublicIp"]}},"WindowsWorkstation4PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation4","PublicIp"]}},"WindowsWorkstation5PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation5","PublicIp"]}},"WindowsWorkstation6PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation6","PublicIp"]}},"WindowsWorkstation7PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation7","PublicIp"]}}}
+}
