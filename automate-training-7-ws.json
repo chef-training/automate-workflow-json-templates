@@ -69,6 +69,11 @@
       "Default": "ami-2afadd3d",
       "Description": "AMI ID for Build Node 4"
     },
+    "BuildNode5AMI": {
+      "Type": "String",
+      "Default": "ami-61f9de76",
+      "Description": "AMI ID for Build Node 5"
+    },
     "acceptanceAMI": {
       "Type": "String",
       "Default": "ami-a5f9deb2",
@@ -131,7 +136,7 @@
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-8cf8df9b",
+      "Default": "ami-82d5d195",
       "Description": "AMI ID for the Automate Server"
     }
   },
@@ -805,6 +810,45 @@
             "Key": "Name",
             "Value": {
               "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 4" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode5": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.55",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-5\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode5AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 5" ] ]
             }
           }
         ]
