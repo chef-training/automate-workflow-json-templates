@@ -1,7 +1,7 @@
 
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "bjc demo",
+  "Description": "BJC Chef Demo (2.0.3)",
   "Parameters": {
     "AvailabilityZone": {
       "Description": "Availability Zone",
@@ -16,7 +16,7 @@
     "Version": {
       "Description": "Version",
       "Type": "String",
-      "Default": "0.2.5"
+      "Default": "2.0.3"
     },
     "KeyName": {
       "Description": "Name of an existing ec2 KeyPair to enable SSH access",
@@ -41,91 +41,93 @@
     },
     "ChefServerAMI": {
       "Type": "String",
-      "Default": "ami-52c4e345",
+      "Default": "ami-43800955",
       "Description": "AMI ID for the Chef Server"
     },
     "ComplianceAMI": {
       "Type": "String",
-      "Default": "ami-dfc6e1c8",
+      "Default": "ami-4e810858",
       "Description": "AMI ID for the Compliance Server"
     },
     "BuildNode1AMI": {
       "Type": "String",
-      "Default": "ami-2ffbdc38",
+      "Default": "ami-d88009ce",
       "Description": "AMI ID for Build Node 1"
     },
     "BuildNode2AMI": {
       "Type": "String",
-      "Default": "ami-acf9debb",
+      "Default": "ami-e08f06f6",
       "Description": "AMI ID for Build Node 2"
     },
     "BuildNode3AMI": {
       "Type": "String",
-      "Default": "ami-09f9de1e",
+      "Default": "ami-8d8f069b",
       "Description": "AMI ID for Build Node 3"
     },
     "BuildNode4AMI": {
       "Type": "String",
-      "Default": "ami-2afadd3d",
+      "Default": "ami-028f0614",
       "Description": "AMI ID for Build Node 4"
-    },
-    "acceptanceAMI": {
-      "Type": "String",
-      "Default": "ami-a5f9deb2",
-      "Description": "AMI ID for acceptance"
     },
     "deliveredAMI": {
       "Type": "String",
-      "Default": "ami-73f9de64",
+      "Default": "ami-bf8e07a9",
       "Description": "AMI ID for delivered"
     },
     "ecomacceptanceAMI": {
       "Type": "String",
-      "Default": "ami-2cfadd3b",
+      "Default": "ami-da8009cc",
       "Description": "AMI ID for ecomacceptance"
     },
     "rehearsalAMI": {
       "Type": "String",
-      "Default": "ami-72f9de65",
+      "Default": "ami-3f8e0729",
       "Description": "AMI ID for rehearsal"
     },
     "unionAMI": {
       "Type": "String",
-      "Default": "ami-bbf9deac",
+      "Default": "ami-cc8d04da",
       "Description": "AMI ID for union"
     },
     "WindowsWorkstation1AMI": {
       "Type": "String",
-      "Default": "ami-0bc7e01c",
+      "Default": "ami-1d840d0b",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation2AMI": {
       "Type": "String",
-      "Default": "ami-a6c7e0b1",
+      "Default": "ami-7899106e",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation3AMI": {
       "Type": "String",
-      "Default": "ami-67c5e270",
+      "Default": "ami-b7850ca1",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation4AMI": {
       "Type": "String",
-      "Default": "ami-a0c7e0b7",
+      "Default": "ami-16991000",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation5AMI": {
       "Type": "String",
-      "Default": "ami-0dc4e31a",
+      "Default": "ami-d3840dc5",
       "Description": "AMI ID for the Windows Workstation"
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-354aeb23",
+      "Default": "ami-5968e04f",
       "Description": "AMI ID for the Automate Server"
     }
   },
   "Resources": {
+    "InstanceProfile" : {
+      "Type" : "AWS::IAM::InstanceProfile",
+      "Properties" : {
+        "Path" : "/",
+        "Roles" : ["testKitchenAndKnifeEc2"]
+      }
+    },
     "VPC": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
@@ -389,6 +391,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "InstanceType": "m3.large",
+        "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -409,6 +412,17 @@
         "KeyName": {
           "Ref": "KeyName"
         },
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "",
+                ["<powershell>\n",
+                  "set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine",
+                 "</powershell>"
+               ]
+            ]
+          }
+        },
         "ImageId": {
               "Ref": "WindowsWorkstation1AMI"
         },
@@ -426,6 +440,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "InstanceType": "m3.large",
+        "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -446,6 +461,17 @@
         "KeyName": {
           "Ref": "KeyName"
         },
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "",
+                ["<powershell>\n",
+                  "set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine",
+                 "</powershell>"
+               ]
+            ]
+          }
+        },
         "ImageId": {
               "Ref": "WindowsWorkstation2AMI"
         },
@@ -463,6 +489,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "InstanceType": "m3.large",
+        "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -483,6 +510,17 @@
         "KeyName": {
           "Ref": "KeyName"
         },
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "",
+                ["<powershell>\n",
+                  "set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine",
+                 "</powershell>"
+               ]
+            ]
+          }
+        },
         "ImageId": {
               "Ref": "WindowsWorkstation3AMI"
         },
@@ -500,6 +538,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "InstanceType": "m3.large",
+        "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -520,6 +559,17 @@
         "KeyName": {
           "Ref": "KeyName"
         },
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "",
+                ["<powershell>\n",
+                  "set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine",
+                 "</powershell>"
+               ]
+            ]
+          }
+        },
         "ImageId": {
               "Ref": "WindowsWorkstation4AMI"
         },
@@ -537,6 +587,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "InstanceType": "m3.large",
+        "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -556,6 +607,17 @@
         ],
         "KeyName": {
           "Ref": "KeyName"
+        },
+        "UserData" : {
+          "Fn::Base64" : {
+            "Fn::Join" : [
+              "",
+                ["<powershell>\n",
+                  "set-executionpolicy -executionpolicy unrestricted -force -scope LocalMachine",
+                 "</powershell>"
+               ]
+            ]
+          }
         },
         "ImageId": {
               "Ref": "WindowsWorkstation5AMI"
@@ -726,45 +788,6 @@
         ]
       }
     },
-    "acceptance": {
-      "Type": "AWS::EC2::Instance",
-      "Properties": {
-        "InstanceType": "m3.large",
-        "AvailabilityZone": { "Ref": "AvailabilityZone" },
-        "NetworkInterfaces": [
-          {
-            "GroupSet": [
-              {
-                "Ref": "DemoSecurityGroup"
-              }
-            ],
-            "AssociatePublicIpAddress": "true",
-            "PrivateIpAddress": "172.31.54.101",
-            "DeviceIndex": "0",
-            "DeleteOnTermination": "true",
-            "SubnetId": {
-              "Ref": "SubnetAutomate"
-            }
-          }
-        ],
-        "KeyName": { "Ref": "KeyName" },
-        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
-             "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname acceptance\n"]]}
-        },
-        "ImageId": {
-              "Ref": "acceptanceAMI"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "acceptance" ] ]
-            }
-          }
-        ]
-      }
-    },
     "delivered": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
@@ -778,7 +801,7 @@
               }
             ],
             "AssociatePublicIpAddress": "true",
-            "PrivateIpAddress": "172.31.54.102",
+            "PrivateIpAddress": "172.31.54.101",
             "DeviceIndex": "0",
             "DeleteOnTermination": "true",
             "SubnetId": {
@@ -817,7 +840,7 @@
               }
             ],
             "AssociatePublicIpAddress": "true",
-            "PrivateIpAddress": "172.31.54.103",
+            "PrivateIpAddress": "172.31.54.102",
             "DeviceIndex": "0",
             "DeleteOnTermination": "true",
             "SubnetId": {
@@ -856,7 +879,7 @@
               }
             ],
             "AssociatePublicIpAddress": "true",
-            "PrivateIpAddress": "172.31.54.104",
+            "PrivateIpAddress": "172.31.54.103",
             "DeviceIndex": "0",
             "DeleteOnTermination": "true",
             "SubnetId": {
@@ -895,7 +918,7 @@
               }
             ],
             "AssociatePublicIpAddress": "true",
-            "PrivateIpAddress": "172.31.54.105",
+            "PrivateIpAddress": "172.31.54.104",
             "DeviceIndex": "0",
             "DeleteOnTermination": "true",
             "SubnetId": {
