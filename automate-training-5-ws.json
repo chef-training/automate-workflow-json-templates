@@ -1,7 +1,7 @@
 
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "BJC Chef Demo (2.0.3)",
+  "Description": "BJC Chef Demo (2.2.1)",
   "Parameters": {
     "AvailabilityZone": {
       "Description": "Availability Zone",
@@ -16,7 +16,7 @@
     "Version": {
       "Description": "Version",
       "Type": "String",
-      "Default": "2.0.3"
+      "Default": "2.2.1"
     },
     "KeyName": {
       "Description": "Name of an existing ec2 KeyPair to enable SSH access",
@@ -41,82 +41,102 @@
     },
     "ChefServerAMI": {
       "Type": "String",
-      "Default": "ami-43800955",
+      "Default": "ami-a21233b4",
       "Description": "AMI ID for the Chef Server"
     },
     "ComplianceAMI": {
       "Type": "String",
-      "Default": "ami-4e810858",
+      "Default": "ami-1b11300d",
       "Description": "AMI ID for the Compliance Server"
     },
     "BuildNode1AMI": {
       "Type": "String",
-      "Default": "ami-d88009ce",
+      "Default": "ami-84113092",
       "Description": "AMI ID for Build Node 1"
     },
     "BuildNode2AMI": {
       "Type": "String",
-      "Default": "ami-e08f06f6",
+      "Default": "ami-a70f2eb1",
       "Description": "AMI ID for Build Node 2"
     },
     "BuildNode3AMI": {
       "Type": "String",
-      "Default": "ami-8d8f069b",
+      "Default": "ami-3f113029",
       "Description": "AMI ID for Build Node 3"
     },
     "BuildNode4AMI": {
       "Type": "String",
-      "Default": "ami-028f0614",
+      "Default": "ami-390e2f2f",
       "Description": "AMI ID for Build Node 4"
+    },
+    "BuildNode5AMI": {
+      "Type": "String",
+      "Default": "ami-e11332f7",
+      "Description": "AMI ID for Build Node 5"
+    },
+    "BuildNode6AMI": {
+      "Type": "String",
+      "Default": "ami-7a13326c",
+      "Description": "AMI ID for Build Node 6"
+    },
+    "BuildNode7AMI": {
+      "Type": "String",
+      "Default": "ami-71103167",
+      "Description": "AMI ID for Build Node 7"
+    },
+    "BuildNode8AMI": {
+      "Type": "String",
+      "Default": "ami-7b13326d",
+      "Description": "AMI ID for Build Node 8"
     },
     "deliveredAMI": {
       "Type": "String",
-      "Default": "ami-bf8e07a9",
+      "Default": "ami-9811308e",
       "Description": "AMI ID for delivered"
     },
     "ecomacceptanceAMI": {
       "Type": "String",
-      "Default": "ami-da8009cc",
+      "Default": "ami-64113072",
       "Description": "AMI ID for ecomacceptance"
     },
     "rehearsalAMI": {
       "Type": "String",
-      "Default": "ami-3f8e0729",
+      "Default": "ami-6811307e",
       "Description": "AMI ID for rehearsal"
     },
     "unionAMI": {
       "Type": "String",
-      "Default": "ami-cc8d04da",
+      "Default": "ami-65113073",
       "Description": "AMI ID for union"
     },
     "WindowsWorkstation1AMI": {
       "Type": "String",
-      "Default": "ami-1d840d0b",
+      "Default": "ami-1bab8a0d",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation2AMI": {
       "Type": "String",
-      "Default": "ami-7899106e",
+      "Default": "ami-9fae8f89",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation3AMI": {
       "Type": "String",
-      "Default": "ami-b7850ca1",
+      "Default": "ami-f1af8ee7",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation4AMI": {
       "Type": "String",
-      "Default": "ami-16991000",
+      "Default": "ami-66ab8a70",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation5AMI": {
       "Type": "String",
-      "Default": "ami-d3840dc5",
+      "Default": "ami-d5ac8dc3",
       "Description": "AMI ID for the Windows Workstation"
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-6a4c307c",
+      "Default": "ami-8e113098",
       "Description": "AMI ID for the Automate Server"
     }
   },
@@ -783,6 +803,162 @@
             "Key": "Name",
             "Value": {
               "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 4" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode5": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.55",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-5\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode5AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 5" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode6": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.56",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-6\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode6AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 6" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode7": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.57",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-7\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode7AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 7" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode8": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.58",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-8\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode8AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 8" ] ]
             }
           }
         ]
