@@ -1,7 +1,7 @@
 
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "BJC Chef Demo (2.2.1)",
+  "Description": "BJC Chef Demo (4.0.1)",
   "Parameters": {
     "AvailabilityZone": {
       "Description": "Availability Zone",
@@ -16,7 +16,7 @@
     "Version": {
       "Description": "Version",
       "Type": "String",
-      "Default": "2.2.1"
+      "Default": "4.0.1"
     },
     "KeyName": {
       "Description": "Name of an existing ec2 KeyPair to enable SSH access",
@@ -41,112 +41,112 @@
     },
     "ChefServerAMI": {
       "Type": "String",
-      "Default": "ami-a21233b4",
+      "Default": "ami-d9f823a3",
       "Description": "AMI ID for the Chef Server"
     },
     "ComplianceAMI": {
       "Type": "String",
-      "Default": "ami-1b11300d",
+      "Default": "ami-d5f922af",
       "Description": "AMI ID for the Compliance Server"
     },
     "BuildNode1AMI": {
       "Type": "String",
-      "Default": "ami-84113092",
+      "Default": "ami-66ff241c",
       "Description": "AMI ID for Build Node 1"
     },
     "BuildNode2AMI": {
       "Type": "String",
-      "Default": "ami-a70f2eb1",
+      "Default": "ami-52f82328",
       "Description": "AMI ID for Build Node 2"
     },
     "BuildNode3AMI": {
       "Type": "String",
-      "Default": "ami-3f113029",
+      "Default": "ami-bbc41fc1",
       "Description": "AMI ID for Build Node 3"
     },
     "BuildNode4AMI": {
       "Type": "String",
-      "Default": "ami-390e2f2f",
+      "Default": "ami-1ffb2065",
       "Description": "AMI ID for Build Node 4"
     },
     "BuildNode5AMI": {
       "Type": "String",
-      "Default": "ami-e11332f7",
+      "Default": "ami-07f8237d",
       "Description": "AMI ID for Build Node 5"
     },
     "BuildNode6AMI": {
       "Type": "String",
-      "Default": "ami-7a13326c",
+      "Default": "ami-93fb20e9",
       "Description": "AMI ID for Build Node 6"
     },
     "BuildNode7AMI": {
       "Type": "String",
-      "Default": "ami-71103167",
+      "Default": "ami-8dfa21f7",
       "Description": "AMI ID for Build Node 7"
     },
     "BuildNode8AMI": {
       "Type": "String",
-      "Default": "ami-7b13326d",
+      "Default": "ami-d1f922ab",
       "Description": "AMI ID for Build Node 8"
     },
     "deliveredAMI": {
       "Type": "String",
-      "Default": "ami-9811308e",
+      "Default": "ami-17fb206d",
       "Description": "AMI ID for delivered"
     },
     "ecomacceptanceAMI": {
       "Type": "String",
-      "Default": "ami-64113072",
+      "Default": "ami-bac51ec0",
       "Description": "AMI ID for ecomacceptance"
     },
     "rehearsalAMI": {
       "Type": "String",
-      "Default": "ami-6811307e",
+      "Default": "ami-91c41feb",
       "Description": "AMI ID for rehearsal"
     },
     "unionAMI": {
       "Type": "String",
-      "Default": "ami-65113073",
+      "Default": "ami-86fa21fc",
       "Description": "AMI ID for union"
     },
     "WindowsWorkstation1AMI": {
       "Type": "String",
-      "Default": "ami-1bab8a0d",
+      "Default": "ami-5e6ac924",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation2AMI": {
       "Type": "String",
-      "Default": "ami-9fae8f89",
+      "Default": "ami-406ccf3a",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation3AMI": {
       "Type": "String",
-      "Default": "ami-f1af8ee7",
+      "Default": "ami-5372d129",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation4AMI": {
       "Type": "String",
-      "Default": "ami-66ab8a70",
+      "Default": "ami-3f7fdc45",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation5AMI": {
       "Type": "String",
-      "Default": "ami-d5ac8dc3",
+      "Default": "ami-2a47e450",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation6AMI": {
       "Type": "String",
-      "Default": "ami-36ab8a20",
+      "Default": "ami-4940e333",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation7AMI": {
       "Type": "String",
-      "Default": "ami-daad8ccc",
+      "Default": "ami-184dee62",
       "Description": "AMI ID for the Windows Workstation"
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-29738353",
+      "Default": "ami-1df92267",
       "Description": "AMI ID for the Automate Server"
     }
   },
@@ -420,7 +420,8 @@
     "WindowsWorkstation1": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
@@ -469,7 +470,8 @@
     "WindowsWorkstation2": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
@@ -518,7 +520,8 @@
     "WindowsWorkstation3": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
@@ -567,7 +570,8 @@
     "WindowsWorkstation4": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
@@ -616,7 +620,8 @@
     "WindowsWorkstation5": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
@@ -665,7 +670,8 @@
     "WindowsWorkstation6": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
@@ -714,7 +720,8 @@
     "WindowsWorkstation7": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "c4.large",
+        "EbsOptimized" : "true",
         "IamInstanceProfile" : {"Ref" : "InstanceProfile"},
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
