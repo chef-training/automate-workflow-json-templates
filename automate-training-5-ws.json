@@ -1361,11 +1361,16 @@
         "Fn::GetAtt":["WindowsWorkstation4","PublicDnsName"]
       }
     },
-  "WindowsWorkstation5PubDNS":{
+  "WindowsWorkstation5PubIP":{
     "Description":"Public IP address of the Windows Workstation",
     "Value":{
-      "Fn::GetAtt":["WindowsWorkstation5","PublicIp"],
-      "Fn::GetAtt":["WindowsWorkstation5","PublicDnsName"]
+      "Fn::GetAtt":["WindowsWorkstation5","PublicIp"]
+      }
+    },
+    "WindowsWorkstation5PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation5","PublicDnsName"]
       }
     }
   }
