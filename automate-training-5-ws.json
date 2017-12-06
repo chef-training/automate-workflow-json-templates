@@ -1319,6 +1319,12 @@
           "Value":{
             "Fn::GetAtt":["WindowsWorkstation1","PublicIp"]
           }
+        },        
+        "WindowsWorkstation1PubHostname":{
+          "Description":"Public hostname of the Windows Workstation",
+          "Value":{
+            "Fn::GetAtt":["WindowsWorkstation1","PublicHostname"]
+          }
         },
         "WindowsWorkstation2PubDNS":{
           "Description":"Public IP address of the Windows Workstation",
