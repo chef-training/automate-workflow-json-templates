@@ -1323,7 +1323,7 @@
         "WindowsWorkstation1PubHostname":{
           "Description":"Public hostname of the Windows Workstation",
           "Value":{
-            "Fn::GetAtt":["WindowsWorkstation1","PublicHostname"]
+            "Fn::GetAtt":["WindowsWorkstation1","PublicDnsName"]
           }
         },
         "WindowsWorkstation2PubDNS":{
