@@ -1482,6 +1482,30 @@
       "Value":{
         "Fn::GetAtt":["WindowsWorkstation5","PublicDnsName"]
       }
+    },
+    "WindowsWorkstation6PubIP":{
+    "Description":"Public IP address of the Windows Workstation",
+    "Value":{
+      "Fn::GetAtt":["WindowsWorkstation6","PublicIp"]
+      }
+    },
+    "WindowsWorkstation6PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation6","PublicDnsName"]
+      }
+    },
+    "WindowsWorkstation7PubIP":{
+    "Description":"Public IP address of the Windows Workstation",
+    "Value":{
+      "Fn::GetAtt":["WindowsWorkstation7","PublicIp"]
+      }
+    },
+    "WindowsWorkstation7PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation7","PublicDnsName"]
+      }
     }
   }
 }
