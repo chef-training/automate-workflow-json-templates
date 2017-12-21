@@ -1313,6 +1313,65 @@
       }
     }
   },
-  "Outputs":
-{"WindowsWorkstation1PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation1","PublicIp"]}},"WindowsWorkstation2PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation2","PublicIp"]}},"WindowsWorkstation3PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation3","PublicIp"]}},"WindowsWorkstation4PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation4","PublicIp"]}},"WindowsWorkstation5PubDNS":{"Description":"Public IP address of the Windows Workstation","Value":{"Fn::GetAtt":["WindowsWorkstation5","PublicIp"]}}}
+  "Outputs":{
+    "WindowsWorkstation1PubIP":{
+      "Description":"Public IP address of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation1","PublicIp"]
+      }
+    },        
+    "WindowsWorkstation1PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation1","PublicDnsName"]
+      }
+    },
+    "WindowsWorkstation2PubIP":{
+      "Description":"Public IP address of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation2","PublicIp"]
+      }
+    },
+    "WindowsWorkstation2PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation2","PublicDnsName"]
+      }
+    },
+    "WindowsWorkstation3PubIP":{
+      "Description":"Public IP address of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation3","PublicIp"]
+      }
+    },
+    "WindowsWorkstation3PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation3","PublicDnsName"]
+      }
+    },
+    "WindowsWorkstation4PubIP":{
+      "Description":"Public IP address of the Windows Workstation","Value":{
+      "Fn::GetAtt":["WindowsWorkstation4","PublicIp"]
+    }
+  },
+    "WindowsWorkstation4PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation4","PublicDnsName"]
+      }
+    },
+  "WindowsWorkstation5PubIP":{
+    "Description":"Public IP address of the Windows Workstation",
+    "Value":{
+      "Fn::GetAtt":["WindowsWorkstation5","PublicIp"]
+      }
+    },
+    "WindowsWorkstation5PubDNS":{
+      "Description":"Public hostname of the Windows Workstation",
+      "Value":{
+        "Fn::GetAtt":["WindowsWorkstation5","PublicDnsName"]
+      }
+    }
+  }
 }
