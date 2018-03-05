@@ -64,6 +64,31 @@
       "Default": "ami-bbc41fc1",
       "Description": "AMI ID for Build Node 3"
     },
+    "BuildNode4AMI": {
+      "Type": "String",
+      "Default": "ami-1ffb2065",
+      "Description": "AMI ID for Build Node 4"
+    },
+    "BuildNode5AMI": {
+      "Type": "String",
+      "Default": "ami-07f8237d",
+      "Description": "AMI ID for Build Node 5"
+    },
+    "BuildNode6AMI": {
+      "Type": "String",
+      "Default": "ami-93fb20e9",
+      "Description": "AMI ID for Build Node 6"
+    },
+    "BuildNode7AMI": {
+      "Type": "String",
+      "Default": "ami-8dfa21f7",
+      "Description": "AMI ID for Build Node 7"
+    },
+    "BuildNode8AMI": {
+      "Type": "String",
+      "Default": "ami-d1f922ab",
+      "Description": "AMI ID for Build Node 8"
+    },
     "deliveredAMI": {
       "Type": "String",
       "Default": "ami-17fb206d",
@@ -121,7 +146,7 @@
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-b8a8a4c2",
+      "Default": "ami-0839a03983393914d",
       "Description": "AMI ID for the Automate Server"
     }
   },
@@ -854,6 +879,201 @@
             "Key": "Name",
             "Value": {
               "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 3" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode4": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.54",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-4\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode4AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 4" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode5": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.55",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-5\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode5AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 5" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode6": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.56",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-6\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode6AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 6" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode7": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.57",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-7\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode7AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 7" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode8": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.58",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-8\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode8AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 8" ] ]
             }
           }
         ]
