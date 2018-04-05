@@ -64,6 +64,11 @@
       "Default": "ami-bbc41fc1",
       "Description": "AMI ID for Build Node 3"
     },
+    "BuildNode4AMI": {
+      "Type": "String",
+      "Default": "ami-1ffb2065",
+      "Description": "AMI ID for Build Node 4"
+    },
     "deliveredAMI": {
       "Type": "String",
       "Default": "ami-17fb206d",
@@ -111,7 +116,7 @@
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-0839a03983393914d",
+      "Default": "ami-04cd97de3a6bdf192",
       "Description": "AMI ID for the Automate Server"
     }
   },
@@ -744,6 +749,45 @@
             "Key": "Name",
             "Value": {
               "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 3" ] ]
+            }
+          }
+        ]
+      }
+    },
+    "BuildNode4": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "m3.large",
+        "AvailabilityZone": { "Ref": "AvailabilityZone" },
+        "NetworkInterfaces": [
+          {
+            "GroupSet": [
+              {
+                "Ref": "DemoSecurityGroup"
+              }
+            ],
+            "AssociatePublicIpAddress": "true",
+            "PrivateIpAddress": "172.31.54.54",
+            "DeviceIndex": "0",
+            "DeleteOnTermination": "true",
+            "SubnetId": {
+              "Ref": "SubnetAutomate"
+            }
+          }
+        ],
+        "KeyName": { "Ref": "KeyName" },
+        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
+             "#!/bin/bash -xe\n",
+             "hostnamectl set-hostname build-node-4\n"]]}
+        },
+        "ImageId": {
+              "Ref": "BuildNode4AMI"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": {
+              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Build Node 4" ] ]
             }
           }
         ]
