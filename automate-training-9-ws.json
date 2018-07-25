@@ -1,12 +1,12 @@
 
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "BJC Chef Demo (4.0.1)",
+  "Description": "BJC Chef Demo (4.6.2)",
   "Parameters": {
     "AvailabilityZone": {
       "Description": "Availability Zone",
       "Type": "String",
-      "Default": "us-east-1b"
+      "Default": "us-west-2c"
     },
     "DemoName": {
       "Description": "Name of the customer or organization",
@@ -16,7 +16,7 @@
     "Version": {
       "Description": "Version",
       "Type": "String",
-      "Default": "4.0.1"
+      "Default": "4.6.2"
     },
     "KeyName": {
       "Description": "Name of an existing ec2 KeyPair to enable SSH access",
@@ -41,122 +41,117 @@
     },
     "ChefServerAMI": {
       "Type": "String",
-      "Default": "ami-d9f823a3",
+      "Default": "ami-01afced8747156e02",
       "Description": "AMI ID for the Chef Server"
-    },
-    "ComplianceAMI": {
-      "Type": "String",
-      "Default": "ami-d5f922af",
-      "Description": "AMI ID for the Compliance Server"
     },
     "BuildNode1AMI": {
       "Type": "String",
-      "Default": "ami-66ff241c",
+      "Default": "ami-02dcb1284ccec2133",
       "Description": "AMI ID for Build Node 1"
     },
     "BuildNode2AMI": {
       "Type": "String",
-      "Default": "ami-52f82328",
+      "Default": "ami-0f2d823f31b6935f6",
       "Description": "AMI ID for Build Node 2"
     },
     "BuildNode3AMI": {
       "Type": "String",
-      "Default": "ami-bbc41fc1",
+      "Default": "ami-0cacee2f9514f1dde",
       "Description": "AMI ID for Build Node 3"
     },
     "BuildNode4AMI": {
       "Type": "String",
-      "Default": "ami-1ffb2065",
+      "Default": "ami-0f1a8378b54377156",
       "Description": "AMI ID for Build Node 4"
     },
     "BuildNode5AMI": {
       "Type": "String",
-      "Default": "ami-07f8237d",
+      "Default": "ami-09550073d175f85e0",
       "Description": "AMI ID for Build Node 5"
     },
     "BuildNode6AMI": {
       "Type": "String",
-      "Default": "ami-93fb20e9",
+      "Default": "ami-04770d95af678be75",
       "Description": "AMI ID for Build Node 6"
     },
     "BuildNode7AMI": {
       "Type": "String",
-      "Default": "ami-8dfa21f7",
+      "Default": "ami-085568537cb59a094",
       "Description": "AMI ID for Build Node 7"
     },
     "BuildNode8AMI": {
       "Type": "String",
-      "Default": "ami-d1f922ab",
+      "Default": "ami-03fb7ea96eb6f48f8",
       "Description": "AMI ID for Build Node 8"
     },
     "deliveredAMI": {
       "Type": "String",
-      "Default": "ami-17fb206d",
+      "Default": "ami-0133ee2f623d805f0",
       "Description": "AMI ID for delivered"
     },
     "ecomacceptanceAMI": {
       "Type": "String",
-      "Default": "ami-bac51ec0",
+      "Default": "ami-0a78c119be7cc8da6",
       "Description": "AMI ID for ecomacceptance"
     },
     "rehearsalAMI": {
       "Type": "String",
-      "Default": "ami-91c41feb",
+      "Default": "ami-0aab4094b4557861f",
       "Description": "AMI ID for rehearsal"
     },
     "unionAMI": {
       "Type": "String",
-      "Default": "ami-86fa21fc",
+      "Default": "ami-01a966b18ccc3ef43",
       "Description": "AMI ID for union"
     },
     "WindowsWorkstation1AMI": {
       "Type": "String",
-      "Default": "ami-5e6ac924",
+      "Default": "ami-0f049c311dba93992",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation2AMI": {
       "Type": "String",
-      "Default": "ami-406ccf3a",
+      "Default": "ami-0ab4cdf9c5b95fa37",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation3AMI": {
       "Type": "String",
-      "Default": "ami-5372d129",
+      "Default": "ami-0a460ac7b4c693464",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation4AMI": {
       "Type": "String",
-      "Default": "ami-3f7fdc45",
+      "Default": "ami-018012fef8eebf3f3",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation5AMI": {
       "Type": "String",
-      "Default": "ami-2a47e450",
+      "Default": "ami-0b84b4aa292f22e2e",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation6AMI": {
       "Type": "String",
-      "Default": "ami-4940e333",
+      "Default": "ami-097e76d87c9074ac2",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation7AMI": {
       "Type": "String",
-      "Default": "ami-184dee62",
+      "Default": "ami-0822a27177aa7e431",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation8AMI": {
       "Type": "String",
-      "Default": "ami-4452f13e",
+      "Default": "ami-04d147f0fc134ade3",
       "Description": "AMI ID for the Windows Workstation"
     },
     "WindowsWorkstation9AMI": {
       "Type": "String",
-      "Default": "ami-ff55f685",
+      "Default": "ami-01e9bcad4358b391d",
       "Description": "AMI ID for the Windows Workstation"
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-0a1bdb380fda1fee1",
+      "Default": "ami-0b9ba5275294117c3",
       "Description": "AMI ID for the Automate Server"
     }
   },
@@ -165,7 +160,7 @@
       "Type" : "AWS::IAM::InstanceProfile",
       "Properties" : {
         "Path" : "/",
-        "Roles" : ["testKitchenAndKnifeEc2"]
+        "Roles" : ["chefDemo"]
       }
     },
     "VPC": {
@@ -880,7 +875,7 @@
     "BuildNode1": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -901,7 +896,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-1\n"]]}
+             "hostnamectl set-hostname build-node-1\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode1AMI"
@@ -919,7 +916,7 @@
     "BuildNode2": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -940,7 +937,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-2\n"]]}
+             "hostnamectl set-hostname build-node-2\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode2AMI"
@@ -958,7 +957,7 @@
     "BuildNode3": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -979,7 +978,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-3\n"]]}
+             "hostnamectl set-hostname build-node-3\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode3AMI"
@@ -997,7 +998,7 @@
     "BuildNode4": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1018,7 +1019,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-4\n"]]}
+             "hostnamectl set-hostname build-node-4\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode4AMI"
@@ -1036,7 +1039,7 @@
     "BuildNode5": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1057,7 +1060,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-5\n"]]}
+             "hostnamectl set-hostname build-node-5\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode5AMI"
@@ -1075,7 +1080,7 @@
     "BuildNode6": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1096,7 +1101,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-6\n"]]}
+             "hostnamectl set-hostname build-node-6\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode6AMI"
@@ -1114,7 +1121,7 @@
     "BuildNode7": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1135,7 +1142,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-7\n"]]}
+             "hostnamectl set-hostname build-node-7\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode7AMI"
@@ -1153,7 +1162,7 @@
     "BuildNode8": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1174,7 +1183,9 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname build-node-8\n"]]}
+             "hostnamectl set-hostname build-node-8\n",
+             "sleep 90\n",
+             "sudo chef-client\n"]]}
         },
         "ImageId": {
               "Ref": "BuildNode8AMI"
@@ -1192,7 +1203,7 @@
     "delivered": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1213,7 +1224,10 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname delivered\n"]]}
+             "hostnamectl set-hostname delivered\n",
+             "sleep 90\n",
+             "sudo chef-client\n"
+             ]]}
         },
         "ImageId": {
               "Ref": "deliveredAMI"
@@ -1231,7 +1245,7 @@
     "ecomacceptance": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1252,7 +1266,10 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname ecomacceptance\n"]]}
+             "hostnamectl set-hostname ecomacceptance\n",
+             "sleep 90\n",
+             "sudo chef-client\n"
+             ]]}
         },
         "ImageId": {
               "Ref": "ecomacceptanceAMI"
@@ -1270,7 +1287,7 @@
     "rehearsal": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1291,7 +1308,10 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname rehearsal\n"]]}
+             "hostnamectl set-hostname rehearsal\n",
+             "sleep 90\n",
+             "sudo chef-client\n"
+             ]]}
         },
         "ImageId": {
               "Ref": "rehearsalAMI"
@@ -1309,7 +1329,7 @@
     "union": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "m3.large",
+        "InstanceType": "m4.large",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
         "NetworkInterfaces": [
           {
@@ -1330,7 +1350,10 @@
         "KeyName": { "Ref": "KeyName" },
         "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
              "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname union\n"]]}
+             "hostnamectl set-hostname union\n",
+             "sleep 90\n",
+             "sudo chef-client\n"
+             ]]}
         },
         "ImageId": {
               "Ref": "unionAMI"
@@ -1348,7 +1371,7 @@
     "Chef": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "c3.xlarge",
+        "InstanceType": "c4.xlarge",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
       	"BlockDeviceMappings" : [
          	{
@@ -1394,7 +1417,7 @@
     "Automate": {
       "Type": "AWS::EC2::Instance",
       "Properties": {
-        "InstanceType": "c3.xlarge",
+        "InstanceType": "c4.xlarge",
         "AvailabilityZone": { "Ref": "AvailabilityZone" },
       	"BlockDeviceMappings" : [
          	{
@@ -1432,52 +1455,6 @@
             "Key": "Name",
             "Value": {
               "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Automate Server" ] ]
-            }
-          }
-        ]
-      }
-    },
-    "Compliance": {
-      "Type": "AWS::EC2::Instance",
-      "Properties": {
-        "InstanceType": "c3.large",
-        "AvailabilityZone": { "Ref": "AvailabilityZone" },
-        "BlockDeviceMappings" : [
-          {
-                "DeviceName" : "/dev/sda1",
-                "Ebs" : { "VolumeSize" : "8" }
-          }
-        ] ,
-        "NetworkInterfaces": [
-          {
-            "GroupSet": [
-              {
-                "Ref": "DemoSecurityGroup"
-              }
-            ],
-            "AssociatePublicIpAddress": "true",
-            "PrivateIpAddress": "172.31.54.12",
-            "DeviceIndex": "0",
-            "DeleteOnTermination": "true",
-            "SubnetId": {
-              "Ref": "SubnetAutomate"
-            }
-          }
-        ],
-        "KeyName": { "Ref": "KeyName" },
-        "UserData": { "Fn::Base64" : { "Fn::Join" : ["", [
-             "#!/bin/bash -xe\n",
-             "hostnamectl set-hostname compliance\n",
-             "chef-compliance-ctl reconfigure\n"]]}
-        },
-        "ImageId": {
-              "Ref": "ComplianceAMI"
-        },
-        "Tags": [
-          {
-            "Key": "Name",
-            "Value": {
-              "Fn::Join" : [ " ", [ { "Ref": "DemoName" }, "Compliance Server" ] ]
             }
           }
         ]
@@ -1527,6 +1504,12 @@
             "IpProtocol": "udp",
             "FromPort": "3389",
             "ToPort": "3389",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "5985",
+            "ToPort": "5985",
             "CidrIp": "0.0.0.0/0"
           }
         ]
