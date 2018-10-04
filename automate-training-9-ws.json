@@ -151,7 +151,7 @@
     },
     "AutomateAMI": {
       "Type": "String",
-      "Default": "ami-0b9ba5275294117c3",
+      "Default": "ami-0b4be8a700faae0b3",
       "Description": "AMI ID for the Automate Server"
     }
   },
